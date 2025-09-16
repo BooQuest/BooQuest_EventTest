@@ -4,6 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>부퀘스트 – 테스트 페이지</title>
+
+  <!-- GA4 gtag 삽입: <head> 태그에 추가 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+  
+    gtag('js', new Date());
+    gtag('config', 'G-MW1VS6B6Z4'); // 측정 ID로 교체
+  </script>
+  
   <style>
     * { box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif; margin: 0; background: #f7f7fb; color: #111827; }
@@ -107,7 +118,7 @@
   </style>
 
 </head>
-<body>
+<body onload="trackPageView()">
   <header>
     <h1>당신의 크리에이터 유형은?</h1>
     <p>1분만에 당신의 SNS 부업 유형을 파악해보세요</p>
@@ -724,6 +735,33 @@
     }
 
     boot();
+
+    function trackPageView() {
+    gtag('event', 'event_page_view', {
+      page_location: window.location.href,
+      page_title: document.title
+    });
+  }
+
+  function logDownloadEvent(platform) {
+    gtag('event', 'download_link_click', {
+      platform: platform,
+      page_path: window.location.pathname
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const appStoreBtn = document.querySelector("a[href*='apps.apple.com']");
+    const playStoreBtn = document.querySelector("a[href*='play.google.com']");
+
+    if (appStoreBtn) {
+      appStoreBtn.addEventListener("click", () => logDownloadEvent("appstore"));
+    }
+    if (playStoreBtn) {
+      playStoreBtn.addEventListener("click", () => logDownloadEvent("playstore"));
+    }
+  });
+    
   </script>
 </body>
 </html>
